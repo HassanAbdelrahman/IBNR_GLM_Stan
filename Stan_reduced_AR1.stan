@@ -52,16 +52,16 @@ model {
   sigma ~ exponential(0.1);
   mu ~ normal(0, 1);
 
-  // Smooth prior on alpha_raw (random walk + sum-to-zero)
+  // AR(1) prior on alpha_raw 
   alpha_raw[1] ~ normal(mu_alpha, sigma_alpha / sqrt(1 - rho^2));
   for (t in 2:L)
     alpha_raw[t] ~ normal(mu_alpha + rho * (alpha_raw[t-1] - mu_alpha), sigma_alpha);
   
   mu_alpha ~ normal(0, 1);
   sigma_alpha  ~ normal(0, 0.5);
-  rho ~ normal(0, 0.5); // pushes rho toward 0 a bit
+  rho ~ normal(0, 0.5); 
 
-  // Independent prior on beta_raw (sum-to-zero will apply)
+  // Independent prior on beta_raw
   beta_raw ~ normal(0, 1);
 
   to_vector(gamma_raw) ~ normal(0, 1);

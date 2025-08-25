@@ -54,12 +54,12 @@ model {
   for (t in 3:L)
     (alpha_raw[t] - 2 * alpha_raw[t-1] + alpha_raw[t-2]) ~ normal(0, sigma_alpha);
   
-  // weak priors for first two (or anchor them)
+  // weak priors for first two 
   alpha_raw[1] ~ normal(0, 1);
   alpha_raw[2] ~ normal(0, 1);
   sigma_alpha ~ normal(0, 0.5);
 
-  // Independent prior on beta_raw (sum-to-zero will apply)
+  // Independent prior on beta_raw 
   beta_raw ~ normal(0, 1);
 
   to_vector(gamma_raw) ~ normal(0, 1);

@@ -61,7 +61,7 @@ model {
   // Penalized spline prior: difference penalty on coefficients
   for (k in 3:K)
     theta[k] ~ normal(2*theta[k-1] - theta[k-2], sigma_theta);
-  theta[1:2] ~ normal(0, 1);    // weakly informative priors on first two
+  theta[1:2] ~ normal(0, 1);    
   sigma_theta ~ normal(0, 0.1);
 
   // Other effects

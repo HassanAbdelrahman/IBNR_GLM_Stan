@@ -54,7 +54,7 @@ model {
   sigma ~ exponential(0.1);
   mu ~ normal(0, 1);
 
-  // Smooth prior on alpha_raw (local linear trend)
+  // prior on alpha_raw (local linear trend)
   alpha_raw[1] ~ normal(mu0, 1);
   delta_raw[1] ~ normal(delta0, 1);
   
@@ -68,7 +68,7 @@ model {
   sigma_level ~ normal(0, 0.5);
   sigma_slope ~ normal(0, 0.2);
 
-  // Independent prior on beta_raw (sum-to-zero will apply)
+  // Independent prior on beta_raw 
   beta_raw ~ normal(0, 1);
 
   to_vector(gamma_raw) ~ normal(0, 1);

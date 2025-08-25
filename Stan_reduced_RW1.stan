@@ -50,15 +50,15 @@ model {
   sigma ~ exponential(0.1);
   mu ~ normal(0, 1);
 
-  // Smooth prior on alpha_raw (random walk + sum-to-zero)
+  // RW prior on alpha_raw 
   alpha_raw[1] ~ normal(0, sigma_alpha);
   for (t in 2:L)
     alpha_raw[t] ~ normal(alpha_raw[t-1], sigma_alpha);
   
-  sigma_alpha ~ normal(0, 0.5); // half-normal (choose scale to match log-rate scale)
+  sigma_alpha ~ normal(0, 0.5); // half-normal
 
 
-  // Independent prior on beta_raw (sum-to-zero will apply)
+  // Independent prior on beta_raw 
   beta_raw ~ normal(0, 1);
 
   to_vector(gamma_raw) ~ normal(0, 1);

@@ -7,7 +7,7 @@ data {
   array[N_obs] int<lower = 0> y;
   array[N_obs] real<lower = 0> exposure;
   array[N_obs] int<lower = 1, upper = L> time;
-  array[N_obs] int<lower = 0, upper = D> delay;   // keep 0-based delays
+  array[N_obs] int<lower = 0, upper = D> delay;   
   array[N_obs] int<lower = 1, upper = 12> month;
 }
 
@@ -15,21 +15,21 @@ parameters {
   real mu;
 
   // non-centered GP parameters
-  vector[L] alpha_std;           // standard normal
-  real log_rho;                  // unconstrained; rho = exp(log_rho)
-  real<lower=0> sigma_alpha;     // GP marginal sd (amplitude)
+  vector[L] alpha_std;          
+  real log_rho;                  
+  real<lower=0> sigma_alpha;     
 
   vector[D] beta_raw;
   matrix[12, D] gamma_raw;
 
-  real<lower=0> sigma;           // NegBin overdispersion (phi)
+  real<lower=0> sigma;           
 }
 
 transformed parameters {
   real rho = exp(log_rho);
   matrix[L, L] K;
   matrix[L, L] L_K;
-  vector[L] alpha;               // GP draw (non-centered -> centered below)
+  vector[L] alpha;              
   vector[L] alpha_centered;
   vector[D] beta;
   matrix[12, D] gamma;
@@ -56,10 +56,8 @@ transformed parameters {
   // non-centered transform
   alpha = L_K * alpha_std;
 
-  // center alpha (sum-to-zero)
+  // center alpha, beta and gamma
   alpha_centered = alpha - mean(alpha);
-
-  // center beta and gamma
   beta = beta_raw - mean(beta_raw);
   for (d in 1:D)
     gamma[, d] = gamma_raw[, d] - mean(gamma_raw[, d]);
@@ -77,8 +75,8 @@ transformed parameters {
 model {
   // Priors
   mu ~ normal(0, 2);
-  log_rho ~ normal(0, 1.5);          // weakly informative
-  sigma_alpha ~ normal(0, 1) T[0,];  // half-normal
+  log_rho ~ normal(0, 1.5);          
+  sigma_alpha ~ normal(0, 1) T[0,];  
   to_vector(beta_raw) ~ normal(0, 1);
   to_vector(gamma_raw) ~ normal(0, 1);
 
